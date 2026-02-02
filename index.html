@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pearl Dental Clinic</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Calibri;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f4f6f8;
+    }
+
+    header {
+      background: #00796B;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin-bottom: 10px;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1588776814546-5d1a07ab7d4c?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero a {
+      padding: 12px 25px;
+      background: #ff9800;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .hero a:hover {
+      background: #e68900;
+    }
+
+    section {
+      padding: 50px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h3 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .service {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .service h4 {
+      margin-bottom: 10px;
+      color: #00796B;
+    }
+
+    .service p {
+      color: #555;
+      font-size: 14px;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      font-size: 14px;
+    }
+
+    @media(max-width:768px) {
+      .services {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .video-text {
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  transform: translateY(-50%);
+  color: white;
+  text-align: left;
+  font-family:'Red Hat Text', Helvetica, Arial, Lucida, sans-serif;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  z-index: 2; 
+}
+.video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 750px;
+}
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Pearl Dental Clinic</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="appointment.html">Request Appointment</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="video-container">
+    <video autoplay loop src="https://pearldentistrynebraska.com/wp-content/uploads/2023/09/Pearl-Dentistry.mp4"></video>
+    </div>
+    <div class="video-text">     
+    <h2>Your Smile, Our Priority</h2>
+    <a href="appointment.html">Request Appointment</a>
+    </div>
+  </div>
+
+  <section id="about">
+    <h3>About Us</h3>
+    <p style="max-width:800px; margin:0 auto; text-align:center; color:#555;">
+      At Pearl Dental Clinic, we provide high-quality dental care with a focus on comfort and patient satisfaction. Our
+      team of experienced dentists ensures your oral health is our top priority.
+    </p>
+  </section>
+
+  <section id="services">
+    <h3>Our Services</h3>
+    <div class="services">
+      <div class="service">
+        <h4>Teeth Cleaning</h4>
+        <p>Professional teeth cleaning to keep your smile healthy and bright.</p>
+      </div>
+      <div class="service">
+        <h4>Checkups</h4>
+        <p>Regular dental checkups to prevent problems before they start.</p>
+      </div>
+      <div class="service">
+        <h4>Braces</h4>
+        <p>Orthodontic treatments to align your teeth and improve your smile.</p>
+      </div>
+      <div class="service">
+        <h4>Root Canal</h4>
+        <p>Pain-free root canal treatments by our experienced dentists.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Pearl Dental Clinic | All Rights Reserved
+  </footer>
+
+</body>
+
+</html>

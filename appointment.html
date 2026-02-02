@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Sign Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Calibri;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input,
+    button {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .link {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .msg {
+      text-align: center;
+      color: green;
+      display: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2 id="authTitle">Login</h2>
+    <form id="authForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit" id="authButton">Login</button>
+    </form>
+    <div class="link" id="toggleAuth">Don't have an account? Sign Up</div>
+    <div class="msg" id="authMsg"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCL8Op4XdUxm0II5CY8OiUysPxdWm0i1WM",
+      authDomain: "application-14507.firebaseapp.com",
+      projectId: "application-14507",
+      storageBucket: "application-14507.firebasestorage.app",
+      messagingSenderId: "15459483369",
+      appId: "1:15459483369:web:45c74986d1522251003a78"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const authForm = document.getElementById("authForm");
+    const authTitle = document.getElementById("authTitle");
+    const authButton = document.getElementById("authButton");
+    const toggleAuth = document.getElementById("toggleAuth");
+    const authMsg = document.getElementById("authMsg");
+
+    let isLogin = true;
+
+    toggleAuth.addEventListener("click", () => {
+      isLogin = !isLogin;
+      authTitle.innerText = isLogin ? "Login" : "Sign Up";
+      authButton.innerText = isLogin ? "Login" : "Sign Up";
+      toggleAuth.innerText = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
+      authMsg.style.display = "none";
+    });
+
+    authForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        if (isLogin) {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "myappointments.html"; // redirect after login
+        } else {
+          await createUserWithEmailAndPassword(auth, email, password);
+          authMsg.innerText = "Account created. You can login now!";
+          authMsg.style.display = "block";
+          isLogin = true; // switch to login automatically after signup
+          authTitle.innerText = "Login";
+          authButton.innerText = "Login";
+          toggleAuth.innerText = "Don't have an account? Sign Up";
+        }
+      } catch (err) {
+        authMsg.innerText = err.message;
+        authMsg.style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Appointments</title>
+<style>
+* { box-sizing: border-box; font-family: Calibri; }
+body { margin:0; background:#f4f6f8; min-height:100vh; display:flex; justify-content:center; align-items:flex-start; padding:20px; }
+.container { background:#fff; padding:30px; border-radius:12px; width:500px; box-shadow:0 10px 30px rgba(0,0,0,.1); }
+h2 { text-align:center; font-weight:400; margin-bottom:20px; }
+form { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
+input, select, button { padding:12px; border-radius:8px; border:1px solid #ccc; }
+button { background:#000; color:#fff; border:none; cursor:pointer; }
+.appointment { background:#f0f0f0; padding:10px; border-radius:6px; margin-bottom:10px; }
+.appointment button { background:red; margin-top:5px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Book Appointment</h2>
+  <form id="appointmentForm">
+    <input id="name" placeholder="Your Name" required>
+    <input type="date" id="date" required>
+    <input type="time" id="time" required>
+    <select id="doctor" required>
+      <option value="">Select Doctor</option>
+      <option>Dr. Ali</option>
+      <option>Dr. Sara</option>
+      <option>Dr. Hina</option>
+    </select>
+    <button type="submit">Book Appointment</button>
+  </form>
+
+  <h2>My Appointments</h2>
+  <div id="appointmentsList"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCL8Op4XdUxm0II5CY8OiUysPxdWm0i1WM",
+      authDomain: "application-14507.firebaseapp.com",
+      projectId: "application-14507",
+      storageBucket: "application-14507.firebasestorage.app",
+      messagingSenderId: "15459483369",
+      appId: "1:15459483369:web:45c74986d1522251003a78"
+    };
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const appointmentForm = document.getElementById("appointmentForm");
+const appointmentsList = document.getElementById("appointmentsList");
+
+let currentUser = null;
+
+// Wait for the user to be logged in first
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    alert("You must login first!");
+    window.location.href = "login.html";
+  } else {
+    currentUser = user;
+    loadAppointments();
+  }
+});
+
+appointmentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentUser) return;
+  try {
+    await addDoc(collection(db, "appointments"), {
+      userId: currentUser.uid,
+      name: document.getElementById("name").value,
+      date: document.getElementById("date").value,
+      time: document.getElementById("time").value,
+      doctor: document.getElementById("doctor").value,
+      status: "Pending"
+    });
+    appointmentForm.reset();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to book appointment");
+  }
+});
+
+function loadAppointments() {
+  if (!currentUser) return;
+  const q = query(collection(db, "appointments"), where("userId", "==", currentUser.uid));
+  onSnapshot(q, (snapshot) => {
+    appointmentsList.innerHTML = "";
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const appointmentDiv = document.createElement("div");
+      appointmentDiv.className = "appointment";
+      appointmentDiv.innerHTML = `
+        <strong>Doctor:</strong> ${data.doctor} <br>
+        <strong>Date:</strong> <input type="date" value="${data.date}" id="editDate-${docSnap.id}"> <br>
+        <strong>Time:</strong> <input type="time" value="${data.time}" id="editTime-${docSnap.id}"> <br>
+        <strong>Status:</strong> ${data.status} <br>
+        <button id="update-${docSnap.id}">Update</button>
+        <button id="delete-${docSnap.id}">Cancel</button>
+      `;
+      appointmentsList.appendChild(appointmentDiv);
+
+      document.getElementById(`delete-${docSnap.id}`).onclick = async () => {
+        await deleteDoc(doc(db, "appointments", docSnap.id));
+      };
+
+      document.getElementById(`update-${docSnap.id}`).onclick = async () => {
+        const newDate = document.getElementById(`editDate-${docSnap.id}`).value;
+        const newTime = document.getElementById(`editTime-${docSnap.id}`).value;
+        await updateDoc(doc(db, "appointments", docSnap.id), { date: newDate, time: newTime });
+      };
+    });
+  });
+}
+</script>
+
+</body>
+</html>
